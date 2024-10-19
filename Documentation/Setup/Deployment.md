@@ -83,7 +83,7 @@ Also copy `credentials.example` to `credentials` and fill in all variables
 ```sh
 sudo ./rebuild.sh
 sudo ./setup_ssl.sh
-sudo docker exec -it spookyScav python3 /home/ubuntu/spookyScav/engfrosh_site/manage.py createsuperuser
+sudo docker exec -it spooky-scav python3 /home/ubuntu/spookyScav/engfrosh_site/manage.py createsuperuser
 ```
 
 Follow the prompts to setup the initial admin user
@@ -93,7 +93,7 @@ Follow the prompts to setup the initial admin user
 After SSL is setup you need to run
 
 ```sh
-sudo docker restart spookyScav
+sudo docker restart spooky-scav
 ```
 
 See [site configuration](#site-config) for information on how to use the site
