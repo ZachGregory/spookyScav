@@ -45,7 +45,7 @@ sudo systemctl start docker
 ### Clone the spookyScav-docker repo
 
 ```
-$ git clone https://github.com/ZachGregory/spookyScav.git
+$ git clone https://github.com/ZachGregory/spookyScav-docker.git
 ```
 
 After running `rebuild.sh` each of these containers will be started and configured to start on boot
