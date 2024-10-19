@@ -42,10 +42,10 @@ sudo systemctl enable docker
 sudo systemctl start docker
 ```
 
-### Clone the engfrosh-docker repo
+### Clone the spookyScav-docker repo
 
 ```
-$ git clone https://github.com/engfrosh/engfrosh-docker.git
+$ git clone https://github.com/ZachGregory/spookyScav.git
 ```
 
 After running `rebuild.sh` each of these containers will be started and configured to start on boot
@@ -53,7 +53,7 @@ After running `rebuild.sh` each of these containers will be started and configur
 ### Run Build On Database Container
 
 ```sh
-cd ~/engfrosh-docker/mariadb/
+cd ~/spookyScav-docker/mariadb/
 sudo ./rebuild.sh
 ```
 
@@ -74,7 +74,7 @@ The DB is now configured
 ### Run Build On Site Container
 
 ```sh
-cd ~/engfrosh-docker/engfrosh-site/
+cd ~/spookyScav-docker/engfrosh-site/
 ```
 
 Now copy `environment.example` to `environment` and fill in all variables
@@ -83,7 +83,7 @@ Also copy `credentials.example` to `credentials` and fill in all variables
 ```sh
 sudo ./rebuild.sh
 sudo ./setup_ssl.sh
-sudo docker exec -it engfrosh python3 /home/ubuntu/engfrosh/engfrosh_site/manage.py createsuperuser
+sudo docker exec -it spookyScav python3 /home/ubuntu/spookyScav/engfrosh_site/manage.py createsuperuser
 ```
 
 Follow the prompts to setup the initial admin user
@@ -93,7 +93,7 @@ Follow the prompts to setup the initial admin user
 After SSL is setup you need to run
 
 ```sh
-sudo docker restart engfrosh
+sudo docker restart spookyScav
 ```
 
 See [site configuration](#site-config) for information on how to use the site
@@ -103,7 +103,7 @@ See [site configuration](#site-config) for information on how to use the site
 ### Run Build On Discord Bot Container
 
 ```sh
-cd ~/engfrosh-docker/discord-bot/
+cd ~/spookyScav-docker/discord-bot/
 ```
 
 Now copy `environment.example` to `environment` as well as `example_configs.py` to `configs.py` and fill in all variables
