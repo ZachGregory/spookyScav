@@ -45,7 +45,7 @@ sudo systemctl start docker
 ### Clone the spookyscav-docker repo
 
 ```
-$ git clone https://github.com/ZachGregory/spookyscav-docker.git
+$ sudo git clone https://github.com/ZachGregory/spookyscav-docker.git
 ```
 
 After running `rebuild.sh` each of these containers will be started and configured to start on boot
@@ -116,6 +116,8 @@ sudo ./setup_ssl.sh
 sudo docker exec -it spookyscav python3 /home/ubuntu/engfrosh/engfrosh_site/manage.py createsuperuser
 ```
 
+During setup_ssl.sh there will be prompts to receive a certificate. Select 1 (Nginx web server plugin) then follow the prompts.  
+
 Follow the prompts to setup the initial admin user
 
 #### Note: that it is safe to ignore the errors from nginx before `setup_ssl.sh` is called as it will be unable to find the SSL certificates
@@ -123,7 +125,7 @@ Follow the prompts to setup the initial admin user
 After SSL is setup you need to run
 
 ```sh
-sudo docker restart spooky-scav
+sudo docker restart spookyscav
 ```
 
 Use `sudo docker exec -it spookyscav sh` to access the shell of the spookyscav container. 
