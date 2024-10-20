@@ -42,17 +42,17 @@ sudo systemctl enable docker
 sudo systemctl start docker
 ```
 
-### Clone the spookyScav-docker repo
+### Clone the spookyscav-docker repo
 
 ```
-$ git clone https://github.com/ZachGregory/spookyScav-docker.git
+$ git clone https://github.com/ZachGregory/spookyscav-docker.git
 ```
 
 After running `rebuild.sh` each of these containers will be started and configured to start on boot
 
 ### Run Build On Database Container
 
-The mariadb container may have an error with an empty `MARIADB_ROOT_PASSWORD` use `sudo nano rebuild.sh` in the mariadb directory and enter a password in the empty field. 
+The mariadb container may have an error with an empty `MARIADB_ROOT_PASSWORD` use `sudo nano rebuild.sh` in the spookyscav-docker/mariadb directory and enter a password in the empty field. 
 
 It also may have incorrectly written fields this is the correct line to replace it
 `docker run -it -d --name $NAME --net host -v $(pwd)/backups:/var/backups --mount source=db,target=/var/lib/mysql/ -e MARIADB_ROOT_PASSWORD="password" --restart unless-stopped engfrosh/$NAME --wait_timeout=31536000 --max_connections=100`
@@ -62,13 +62,13 @@ Useful commands: docker logs mariadb    /   docker kill mariadb     /   docker r
 There will be an error response the first time rebuild.sh is run and can be safely ignored so long as the container is up. If it is in a restart loop the error cannot be ignored. 
 
 ```sh
-cd ~/spookyScav-docker/mariadb/
+cd ~/spookyscav-docker/mariadb/
 sudo ./rebuild.sh
 ```
 
 When prompted for a database password choose a good password for the `root` account
 
-Next initialize the database with the following command
+Next initialize the database with the following command and follow the prompts
 
 ```sh
 sudo ./setup.sh
@@ -85,16 +85,16 @@ First add the domain to allowed hosts in settings.py if not already done.
 ### Setup deps docker image
 
 ```sh
-cd ~/spookyScav-docker/engfrosh-deps/
+cd ~/spookyscav-docker/engfrosh-deps/
 sudo ./rebuild.sh
 ```
 
-Now that the image is built you can build the site. 
+Now that the dependency image is built you can build the site. 
 
 ### Run Build On Site Container
 
 ```sh
-cd ~/spookyScav-docker/engfrosh-site/
+cd ~/spookyscav-docker/engfrosh-site/
 ```
 
 Now copy `environment.example` to `environment` and fill in all variables
@@ -113,7 +113,7 @@ Now actually build engfrosh-site
 ```sh
 sudo ./rebuild.sh
 sudo ./setup_ssl.sh
-sudo docker exec -it spooky-scav python3 /home/ubuntu/spookyScav/engfrosh_site/manage.py createsuperuser
+sudo docker exec -it spookyscav python3 /home/ubuntu/engfrosh/engfrosh_site/manage.py createsuperuser
 ```
 
 Follow the prompts to setup the initial admin user
@@ -126,15 +126,16 @@ After SSL is setup you need to run
 sudo docker restart spooky-scav
 ```
 
-Use `sudo docker exec -it engfrosh sh` to access the shell of the engfrosh container. 
+Use `sudo docker exec -it spookyscav sh` to access the shell of the spookyscav container. 
 
-Now the unix socket must be setup.
-Run the following in the engfrosh container shell:
+Now the unix socket must be setup. This should have been done with the start.sh file but that does not work. 
+Run the following in the spookyscav container shell:
 ```sh
 cd /home/ubuntu/engfrosh/engfrosh_site/
 gunicorn --workers 3 --bind unix:/home/ubuntu/engfrosh/engfrosh_site/engfrosh_site.sock --worker-class uvicorn.workers.UvicornWorker engfrosh_site.asgi:application
 ```
 
+Yippee!! It should now be setup and working properly (hopefully).
 
 See [site configuration](#site-config) for information on how to use the site
 
@@ -143,7 +144,7 @@ See [site configuration](#site-config) for information on how to use the site
 ### Run Build On Discord Bot Container
 
 ```sh
-cd ~/spookyScav-docker/discord-bot/
+cd ~/spookyscav-docker/discord-bot/
 ```
 
 Now copy `environment.example` to `environment` as well as `example_configs.py` to `configs.py` and fill in all variables
