@@ -93,20 +93,20 @@ if development:
     ALLOWED_HOSTS = [
         "127.0.0.1",
         "localhost",
-        "server.engfrosh.com",
-        "engfrosh.com"
+        "spooky.extremescav.com",
+        "extremescav.com"
     ]
 else:
     ALLOWED_HOSTS = [
-        "time.engfrosh.com",
-        ".engfrosh.com"
+        "spooky.extremescav.com",
+        ".extremescav.com"
     ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://*.engfrosh.com",
-    "https://time.engfrosh.com",
-    "http://*.engfrosh.com",
-    "http://time.engfrosh.com"
+    "http://spooky.extremescav.com",
+    "https://spooky.extremescav.com",
+    "http://*.extremescav.com",
+    "https://*.extremescav.com"
 ]
 
 REST_FRAMEWORK = {
@@ -123,7 +123,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 DEFAULT_DISCORD_API_VERSION = 10
 DEFAULT_DISCORD_SCOPE = ["identify", "guilds.join"]
 if not development:
-    SESSION_COOKIE_DOMAIN = ".engfrosh.com"
+    SESSION_COOKIE_DOMAIN = ".extremescav.com"
 
 # Model Defaults
 DEFAULT_SCAVENGER_PUZZLE_REQUIRE_PHOTO_UPLOAD = True
