@@ -52,6 +52,15 @@ After running `rebuild.sh` each of these containers will be started and configur
 
 ### Run Build On Database Container
 
+The mariadb container may have an error with an empty `MARIADB_ROOT_PASSWORD` use `sudo nano rebuild.sh` in the mariadb directory and enter a password in the empty field. 
+
+It also may have incorrectly written fields this is the correct line to replace it
+`docker run -it -d --name $NAME --net host -v $(pwd)/backups:/var/backups --mount source=db,target=/var/lib/mysql/ -e MARIADB_ROOT_PASSWORD="password" --restart unless-stopped engfrosh/$NAME --wait_timeout=31536000 --max_connections=100`
+
+Useful commands: docker logs mariadb    /   docker kill mariadb     /   docker rm mariadb   /   docker ps
+
+There will be an error response the first time rebuild.sh is run and can be safely ignored so long as the container is up. If it is in a restart loop the error cannot be ignored. 
+
 ```sh
 cd ~/spookyScav-docker/mariadb/
 sudo ./rebuild.sh
@@ -71,6 +80,17 @@ The DB is now configured
 
 ## Setup the EngFrosh site
 
+First add the domain to allowed hosts in settings.py if not already done. 
+
+### Setup deps docker image
+
+```sh
+cd ~/spookyScav-docker/engfrosh-deps/
+sudo ./rebuild.sh
+```
+
+Now that the image is built you can build the site. 
+
 ### Run Build On Site Container
 
 ```sh
@@ -79,6 +99,16 @@ cd ~/spookyScav-docker/engfrosh-site/
 
 Now copy `environment.example` to `environment` and fill in all variables
 Also copy `credentials.example` to `credentials` and fill in all variables
+
+The above does not work. Set the secret key instead in engfrosh-docker/engfrosh-site/Dockerfile with `ENV DJANGO_SECRET_KEY="your-actual-secret-key"`
+
+You can use python to generate a new secret key with: 
+```sh
+from django.core.management.utils import get_random_secret_key
+print(get_random_secret_key())
+```
+
+Now actually build engfrosh-site
 
 ```sh
 sudo ./rebuild.sh
@@ -95,6 +125,16 @@ After SSL is setup you need to run
 ```sh
 sudo docker restart spooky-scav
 ```
+
+Use `sudo docker exec -it engfrosh sh` to access the shell of the engfrosh container. 
+
+Now the unix socket must be setup.
+Run the following in the engfrosh container shell:
+```sh
+cd /home/ubuntu/engfrosh/engfrosh_site/
+gunicorn --workers 3 --bind unix:/home/ubuntu/engfrosh/engfrosh_site/engfrosh_site.sock --worker-class uvicorn.workers.UvicornWorker engfrosh_site.asgi:application
+```
+
 
 See [site configuration](#site-config) for information on how to use the site
 
